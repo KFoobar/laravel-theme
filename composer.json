@@ -1,0 +1,42 @@
+{
+    "name": "kfoobar/laravel-theme",
+    "description": "Theme support for Laravel",
+    "keywords": [
+        "laravel",
+        "theme",
+        "multisite"
+    ],
+    "license": "MIT",
+    "type": "project",
+    "require": {
+        "php": "^8",
+        "ext-json": "*",
+        "illuminate/config": "^8.0||^9.0||^10.0",
+        "illuminate/database": "^8.0||^9.0||^10.0",
+        "illuminate/support": "^8.0||^9.0||^10.0"
+    },
+    "autoload": {
+        "psr-4": {
+            "KFoobar\\Theme\\": "src/"
+        },
+        "files": [
+            "src/Helpers/ThemeHelper.php"
+        ]
+    },
+    "authors": [
+        {
+            "name": "David Villa",
+            "email": "david@kfoobar.se"
+        }
+    ],
+    "extra": {
+        "laravel": {
+            "providers": [
+                "KFoobar\\Theme\\ThemeServiceProvider"
+            ],
+            "aliases": {
+                "Theme": "KFoobar\\Theme\\Facades\\Theme"
+            }
+        }
+    }
+}
