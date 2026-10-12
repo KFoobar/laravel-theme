@@ -2,8 +2,6 @@
 
 Lightweight theme configuration and view fallback for Laravel 12 and 13.
 
-This is the **2.x development branch**. Version 2.0 is not published yet. Applications on Laravel 8–10 can continue using `1.x`.
-
 ## Requirements
 
 | Laravel | PHP | Testbench (development) |
@@ -15,7 +13,7 @@ The package requires PHP `^8.2` and Illuminate `^12.0 || ^13.0`. Laravel 13's ow
 
 ## Installation
 
-Once 2.0 is published, install it with Composer:
+Install the package with Composer:
 
 ```bash
 composer require kfoobar/laravel-theme:^2.0
@@ -103,8 +101,6 @@ For [issue #1](https://github.com/KFoobar/laravel-theme/issues/1), no `.env` ent
 
 ## Upgrading from 1.x
 
-Apply the independent 1.x bugfix release first if your application still uses Laravel 8–10. Both branches share the facade, fallback, safe installation and configuration fixes.
-
 Version 2 requires Laravel 12 with PHP 8.2+, or Laravel 13 with PHP 8.3+. Laravel 8–11 and PHP 8.0–8.1 are not supported in 2.x. Unused `illuminate/database` and `ext-json` requirements are removed; applications must declare their own database dependencies if needed.
 
 Existing theme configuration, view paths, nested theme names, lists and explicit empty values retain the 1.x bugfix behavior. There is no additional theme migration. Custom subclasses overriding provider `register()`/`boot()`, command `handle()` or facade `getFacadeAccessor()` must use compatible return types (`void`, `int` and `string`, respectively). The protected `registerConfig()` hook remains available.
@@ -132,7 +128,7 @@ composer update --with-all-dependencies --with="laravel/framework:^12.0" --with=
 composer test
 ```
 
-For Laravel 13 use `^13.0` and Testbench `^11.0` on PHP 8.3+. Tests use isolated application directories, including a separate application bootstrap and a real configuration-cache round trip. The legacy dependency-policy exception exists only on the 1.x maintenance branch and is not used by 2.x.
+For Laravel 13 use `^13.0` and Testbench `^11.0` on PHP 8.3+. Tests use isolated application directories, including a separate application bootstrap and a real configuration-cache round trip.
 
 ## Use with Tailwind CSS
 
