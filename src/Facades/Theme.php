@@ -4,13 +4,14 @@ namespace KFoobar\Theme\Facades;
 
 use Illuminate\Support\Facades\Facade;
 
+/**
+ * @method static \Illuminate\Contracts\View\View|\Illuminate\Contracts\View\Factory view(mixed $view = null, \Illuminate\Contracts\Support\Arrayable|array $data = [], array $mergeData = [])
+ * @method static bool exists(string $view)
+ *
+ * @see \KFoobar\Theme\Theme
+ */
 class Theme extends Facade
 {
-    /**
-     * Get the registered name of the component.
-     *
-     * @return string
-     */
     protected static function getFacadeAccessor()
     {
         return \KFoobar\Theme\Theme::class;
