@@ -10,7 +10,7 @@ use KFoobar\Theme\Commands\InstallCommand;
 
 class ThemeServiceProvider extends BaseServiceProvider
 {
-    public function register()
+    public function register(): void
     {
         $this->registerConfig();
 
@@ -30,7 +30,7 @@ class ThemeServiceProvider extends BaseServiceProvider
         $this->app->singleton(Theme::class);
     }
 
-    public function boot()
+    public function boot(): void
     {
         if ($this->app->runningInConsole()) {
             $this->commands([InstallCommand::class]);
