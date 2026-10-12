@@ -6,6 +6,7 @@ use Illuminate\Contracts\View\Factory;
 use Illuminate\Support\Collection;
 use InvalidArgumentException;
 use KFoobar\Theme\Facades\Theme;
+use PHPUnit\Framework\Attributes\DataProvider;
 
 class ViewTest extends TestCase
 {
@@ -41,7 +42,7 @@ class ViewTest extends TestCase
         $this->assertTrue(Theme::exists('home'));
     }
 
-    /** @dataProvider emptyThemes */
+    #[DataProvider('emptyThemes')]
     public function test_missing_or_empty_theme_uses_configured_default(?string $selected): void
     {
         $this->app['config']->set('theme', ['theme' => $selected, 'default' => 'base']);

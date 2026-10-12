@@ -12,7 +12,7 @@ class InstallCommand extends Command
 
     protected $description = 'Create default theme files without overwriting existing files';
 
-    public function handle()
+    public function handle(): int
     {
         $files = new Filesystem;
 

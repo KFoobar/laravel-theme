@@ -1,5 +1,24 @@
 # Changelog
 
+## 2.0.0 — Unreleased
+
+### Breaking changes
+
+- Require PHP `^8.2` and Laravel 12 or 13; Laravel 13 requires PHP 8.3+.
+- Drop Laravel 8–11 and PHP 8.0–8.1 support.
+- Remove unused `illuminate/database` and `ext-json` requirements.
+- Add explicit return types to provider, command and facade methods; subclasses overriding these methods must use compatible signatures.
+
+### Development
+
+- Upgrade PHPUnit to 11/12 and Testbench to 10/11.
+- Test Laravel 12 on PHP 8.2–8.5 and Laravel 13 on PHP 8.3–8.5 in GitHub Actions.
+- Stop tracking the library's Composer lock file.
+
+### Inherited fixes
+
+- Include all 1.x facade, view, configuration and installation fixes without changing their behavior.
+
 ## 1.x — Unreleased
 
 ### Fixed

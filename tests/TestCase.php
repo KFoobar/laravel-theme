@@ -10,7 +10,7 @@ abstract class TestCase extends OrchestraTestCase
 {
     protected string $directory;
 
-    protected function getEnvironmentSetUp($app): void
+    protected function defineEnvironment($app): void
     {
         $this->directory = __DIR__ . '/../work/tests/' . bin2hex(random_bytes(8));
 
