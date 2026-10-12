@@ -2,7 +2,7 @@
 
 namespace KFoobar\Theme;
 
-use Illuminate\Support\Facades\View;
+use Illuminate\Contracts\View\Factory;
 use Illuminate\Support\ServiceProvider as BaseServiceProvider;
 use KFoobar\Theme\Commands\InstallCommand;
 
@@ -25,6 +25,8 @@ class ThemeServiceProvider extends BaseServiceProvider
         } elseif (!empty($default) && file_exists(config_path('themes/' . $default . '.php'))) {
             $this->mergeConfigFrom(config_path('themes/' . $default . '.php'), 'theme');
         }
+
+        $this->app->singleton(Theme::class);
     }
 
     /**
@@ -40,8 +42,11 @@ class ThemeServiceProvider extends BaseServiceProvider
             ]);
         }
 
-        View::addNamespace('theme', resource_path('views/themes/' . config('theme.theme')));
-        View::addNamespace('default', resource_path('views/themes/' . config('theme.default')));
+        $this->callAfterResolving('view', function (Factory $factory): void {
+            foreach (['theme', 'default'] as $namespace) {
+                $factory->addNamespace($namespace, resource_path('views/themes/' . config('theme.' . $namespace)));
+            }
+        });
 
         $this->publishes([
             __DIR__ . '/../config/theme.php' => config_path('theme.php'),
