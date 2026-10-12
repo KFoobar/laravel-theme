@@ -1,0 +1,61 @@
+name: Tests
+
+on:
+  push:
+  pull_request:
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  tests:
+    runs-on: ubuntu-latest
+    strategy:
+      fail-fast: false
+      matrix:
+        include:
+          - php: '8.0'
+            laravel: '8'
+            testbench: '^6.0'
+          - php: '8.1'
+            laravel: '8'
+            testbench: '^6.0'
+          - php: '8.0'
+            laravel: '9'
+            testbench: '^7.0'
+          - php: '8.1'
+            laravel: '9'
+            testbench: '^7.0'
+          - php: '8.2'
+            laravel: '9'
+            testbench: '^7.0'
+          - php: '8.1'
+            laravel: '10'
+            testbench: '^8.0'
+          - php: '8.2'
+            laravel: '10'
+            testbench: '^8.0'
+          - php: '8.3'
+            laravel: '10'
+            testbench: '^8.0'
+    name: PHP ${{ matrix.php }} / Laravel ${{ matrix.laravel }}
+    steps:
+      - uses: actions/checkout@v4
+      - uses: shivammathur/setup-php@v2
+        with:
+          php-version: ${{ matrix.php }}
+          extensions: mbstring, dom, fileinfo, sqlite3, pdo_sqlite
+          coverage: none
+          tools: composer:v2
+      - name: Validate Composer metadata
+        run: composer validate --strict
+      - name: Install legacy compatibility dependencies
+        env:
+          COMPOSER_POLICY_ADVISORIES_BLOCK: '0'
+        run: >-
+          composer update --prefer-dist --no-interaction --with-all-dependencies
+          --with="laravel/framework:^${{ matrix.laravel }}.0"
+          --with="orchestra/testbench:${{ matrix.testbench }}"
+      - name: Run tests
+        run: composer test
