@@ -1,15 +1,24 @@
 # Laravel Theme
 
-Lightweight package for Laravel 8/9/10 that adds simple support for themes.
+Lightweight theme configuration and view fallback for Laravel 12 and 13.
 
-This is the **1.x maintenance branch**. PHP `^8` and Laravel 8–10 remain supported; Laravel 9 requires PHP 8.0.2+ and Laravel 10 requires PHP 8.1+. The fixes on this branch do not require upgrading your application to Laravel 12 or 13.
+This is the **2.x development branch**. Version 2.0 is not published yet. Applications on Laravel 8–10 can continue using `1.x`.
+
+## Requirements
+
+| Laravel | PHP | Testbench (development) |
+| --- | --- | --- |
+| 12 | 8.2–8.5 | 10 |
+| 13 | 8.3–8.5 | 11 |
+
+The package requires PHP `^8.2` and Illuminate `^12.0 || ^13.0`. Laravel 13's own PHP requirement excludes PHP 8.2.
 
 ## Installation
 
-You can install the package with Composer:
+Once 2.0 is published, install it with Composer:
 
 ```bash
-composer require kfoobar/laravel-theme:^1.0
+composer require kfoobar/laravel-theme:^2.0
 ```
 
 The package will automatically register itself.
@@ -88,21 +97,42 @@ return Theme::view('index', ['title' => 'Home']);
 
 Use `Theme::exists('index')` to check all candidates. Factory methods, Blade includes and layouts use Laravel's normal lookup rules.
 
-Without `APP_THEME`, the existing configuration selects `default`. An explicitly empty/null selection retains the 1.x lookup in `resources/views/themes/`, followed by the default theme and ordinary views. Nested theme names and stringable view names remain supported. The protected `registerConfig()` provider extension hook is retained.
+Without `APP_THEME`, the existing configuration selects `default`. An explicitly empty/null selection retains the existing lookup in `resources/views/themes/`, followed by the default theme and ordinary views. Nested theme names and stringable view names remain supported. The protected `registerConfig()` provider extension hook is retained.
 
 For [issue #1](https://github.com/KFoobar/laravel-theme/issues/1), no `.env` entry is required when the requested view exists in one of the fallback locations. Run `theme:install` if you need the starter `index` view. Views missing everywhere still throw an exception; the installer cannot create arbitrary application pages.
 
-## Development
+## Upgrading from 1.x
 
-The regression suite uses PHPUnit 9 and Orchestra Testbench 6, 7 or 8. CI covers Laravel 8 on PHP 8.0–8.1, Laravel 9 on PHP 8.0–8.2 and Laravel 10 on PHP 8.1–8.3.
+Apply the independent 1.x bugfix release first if your application still uses Laravel 8–10. Both branches share the facade, fallback, safe installation and configuration fixes.
+
+Version 2 requires Laravel 12 with PHP 8.2+, or Laravel 13 with PHP 8.3+. Laravel 8–11 and PHP 8.0–8.1 are not supported in 2.x. Unused `illuminate/database` and `ext-json` requirements are removed; applications must declare their own database dependencies if needed.
+
+Existing theme configuration, view paths, nested theme names, lists and explicit empty values retain the 1.x bugfix behavior. There is no additional theme migration. Custom subclasses overriding provider `register()`/`boot()`, command `handle()` or facade `getFacadeAccessor()` must use compatible return types (`void`, `int` and `string`, respectively). The protected `registerConfig()` hook remains available.
+
+Rebuild Laravel's configuration cache after updating the package:
 
 ```bash
-composer install
+php artisan config:cache
+```
+
+## Development
+
+The regression suite uses PHPUnit 11/12 and Orchestra Testbench 10/11. GitHub Actions covers all seven combinations in the requirements table. The library no longer tracks `composer.lock`, allowing each compatibility environment to resolve appropriate dependencies.
+
+```bash
+composer update
 composer validate --strict
 composer test
 ```
 
-The tests run in isolated application directories. Older framework versions have known dependency advisories, so the CI dependency-resolution step uses `COMPOSER_POLICY_ADVISORIES_BLOCK=0` solely for compatibility testing. This is not part of the package's Composer configuration or a recommendation for applications. Local matrix runs use the same temporary environment setting with `composer update --with-all-dependencies --with="laravel/framework:^8.0" --with="orchestra/testbench:^6.0"`; select the matching framework/Testbench major for other rows.
+To test a particular framework major:
+
+```bash
+composer update --with-all-dependencies --with="laravel/framework:^12.0" --with="orchestra/testbench:^10.0"
+composer test
+```
+
+For Laravel 13 use `^13.0` and Testbench `^11.0` on PHP 8.3+. Tests use isolated application directories, including a separate application bootstrap and a real configuration-cache round trip. The legacy dependency-policy exception exists only on the 1.x maintenance branch and is not used by 2.x.
 
 ## Use with Tailwind CSS
 
